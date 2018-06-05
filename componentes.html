@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Información con Gio</title>
+<style type="text/css">
+<!--
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	background-color: #4E5869;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+/* ~~ Selectores de elemento/etiqueta ~~ */
+ul, ol, dl { /* Debido a las diferencias existentes entre los navegadores, es recomendable no añadir relleno ni márgenes en las listas. Para lograr coherencia, puede especificar las cantidades deseadas aquí o en los elementos de lista (LI, DT, DD) que contienen. Recuerde que lo que haga aquí se aplicará en cascada en la lista .nav, a no ser que escriba un selector más específico. */
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;	 /* la eliminación del margen superior resuelve un problema que origina que los márgenes escapen de la etiqueta div contenedora. El margen inferior restante lo mantendrá separado de los elementos de que le sigan. */
+	padding-right: 15px;
+	padding-left: 15px; /* la adición de relleno a los lados del elemento dentro de las divs, en lugar de en las divs propiamente dichas, elimina todas las matemáticas de modelo de cuadro. Una div anidada con relleno lateral también puede usarse como método alternativo. */
+}
+a img { /* este selector elimina el borde azul predeterminado que se muestra en algunos navegadores alrededor de una imagen cuando está rodeada por un vínculo */
+	border: none;
+}
+
+/* ~~ La aplicación de estilo a los vínculos del sitio debe permanecer en este orden (incluido el grupo de selectores que crea el efecto hover -paso por encima-). ~~ */
+a:link {
+	color:#414958;
+	text-decoration: underline; /* a no ser que aplique estilos a los vínculos para que tengan un aspecto muy exclusivo, es recomendable proporcionar subrayados para facilitar una identificación visual rápida */
+}
+a:visited {
+	color: #4E5869;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* este grupo de selectores proporcionará a un usuario que navegue mediante el teclado la misma experiencia de hover (paso por encima) que experimenta un usuario que emplea un ratón. */
+	text-decoration: none;
+}
+
+/* ~~ este contenedor rodea a todas las demás divs, lo que les asigna su anchura basada en porcentaje ~~ */
+.container {
+	width: 80%;
+	max-width: 1260px;/* puede que sea conveniente una anchura máxima (max-width) para evitar que este diseño sea demasiado ancho en un monitor grande. Esto mantiene una longitud de línea más legible. IE6 no respeta esta declaración. */
+	min-width: 780px;/* puede que sea conveniente una anchura mínima (min-width) para evitar que este diseño sea demasiado estrecho. Esto permite que la longitud de línea sea más legible en las columnas laterales. IE6 no respeta esta declaración. */
+	background-color: #FFF;
+	margin: 0 auto; /* el valor automático de los lados, unido a la anchura, centra el diseño. No es necesario si establece la anchura de .container en el 100%. */
+}
+
+/* ~~ no se asigna una anchura al encabezado. Se extenderá por toda la anchura del diseño. Contiene un marcador de posición de imagen que debe sustituirse por su propio logotipo vinculado ~~ */
+.header {
+	background-color: #6F7D94;
+}
+
+/* ~~ Estas son las columnas para el diseño. ~~ 
+
+1) El relleno sólo se sitúa en la parte superior y/o inferior de las divs. Los elementos situados dentro de estas divs tienen relleno a los lados. Esto le ahorra las "matemáticas de modelo de cuadro". Recuerde que si añade relleno o borde lateral a la div propiamente dicha, éste se añadirá a la anchura que defina para crear la anchura *total*. También puede optar por eliminar el relleno del elemento en la div y colocar una segunda div dentro de ésta sin anchura y el relleno necesario para el diseño deseado.
+
+2) No se asigna margen a las columnas, ya que todas ellas son flotantes. Si es preciso añadir un margen, evite colocarlo en el lado hacia el que se produce la flotación (por ejemplo: un margen derecho en una div configurada para flotar hacia la derecha). En muchas ocasiones, puede usarse relleno como alternativa. En el caso de divs para las que deba incumplirse esta regla, deberá añadir una declaración "display:inline" a la regla de la div para evitar un error que provoca que algunas versiones de Internet Explorer dupliquen el margen.
+
+3) Dado que las clases se pueden usar varias veces en un documento (y que también se pueden aplicar varias clases a un elemento), se ha asignado a las columnas nombres de clases en lugar de ID. Por ejemplo, dos divs de barra lateral podrían apilarse si fuera necesario. Si lo prefiere, éstas pueden cambiarse a ID fácilmente, siempre y cuando las utilice una sola vez por documento.
+
+4) Si prefiere que la navegación esté a la derecha en lugar de a la izquierda, simplemente haga que estas columnas floten en dirección opuesta (todas a la derecha en lugar de todas a la izquierda) y éstas se representarán en orden inverso. No es necesario mover las divs por el código fuente HTML.
+
+*/
+.sidebar1 {
+	float: left;
+	width: 20%;
+	background-color: #93A5C4;
+	padding-bottom: 10px;
+}
+.content {
+	padding: 10px 0;
+	width: 80%;
+	float: left;
+}
+
+/* ~~ Este selector agrupado da espacio a las listas del área de .content ~~ */
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; /* este relleno reproduce en espejo el relleno derecho de la regla de encabezados y de párrafo incluida más arriba. El relleno se ha colocado en la parte inferior para que el espacio existente entre otros elementos de la lista y a la izquierda cree la sangría. Estos pueden ajustarse como se desee. */
+}
+
+/* ~~ Los estilos de lista de navegación (pueden eliminarse si opta por usar un menú desplegable predefinido como el de Spry) ~~ */
+ul.nav {
+	list-style: none; /* esto elimina el marcador de lista */
+	border-top: 1px solid #666; /* esto crea el borde superior de los vínculos (los demás se sitúan usando un borde inferior en el LI) */
+	margin-bottom: 15px; /* esto crea el espacio entre la navegación en el contenido situado debajo */
+}
+ul.nav li {
+	border-bottom: 1px solid #666; /* esto crea la separación de los botones */
+}
+ul.nav a, ul.nav a:visited { /* al agrupar estos selectores, se asegurará de que los vínculos mantengan el aspecto de botón incluso después de haber sido visitados */
+	padding: 5px 5px 5px 15px;
+	display: block; /* esto asigna propiedades de bloque al vínculo, lo que provoca que llene todo el LI que lo contiene. Esto provoca que toda el área reaccione a un clic de ratón. */
+	text-decoration: none;
+	background-color: #8090AB;
+	color: #000;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* esto cambia el color de fondo y del texto tanto para usuarios que naveguen con ratón como para los que lo hagan con teclado */
+	background-color: #6F7D94;
+	color: #FFF;
+}
+
+/* ~~ El pie de página ~~ */
+.footer {
+	padding: 10px 0;
+	background-color: #6F7D94;
+	position: relative;/* esto da a IE6 hasLayout para borrar correctamente */
+	clear: both; /* esta propiedad de borrado fuerza a .container a conocer dónde terminan las columnas y a contenerlas */
+}
+
+/* ~~ clases float/clear varias ~~ */
+.fltrt {  /* esta clase puede utilizarse para que un elemento flote en la parte derecha de la página. El elemento flotante debe preceder al elemento junto al que debe aparecer en la página. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* esta clase puede utilizarse para que un elemento flote en la parte izquierda de la página. El elemento flotante debe preceder al elemento junto al que debe aparecer en la página. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* esta clase puede situarse en una <br /> o div vacía como elemento final tras la última div flotante (dentro de #container) si #footer se elimina o se saca fuera de #container */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+-->
+</style><!--[if lte IE 7]>
+<style>
+.content { margin-right: -1px; } /* este margen negativo de 1 px puede situarse en cualquiera de las columnas de este diseño con el mismo efecto corrector. */
+ul.nav a { zoom: 1; }  /* la propiedad de zoom da a IE el desencadenante hasLayout que necesita para corregir el espacio en blanco extra existente entre los vínculos */
+</style>
+<![endif]--></head>
+
+<body background="imagenes/fondo.jpeg">
+
+<div class="container">
+  <div class="header"><img src="imagenes/logo.jpeg" alt="Insertar logotipo aquí" name="logo" width="100%" height="300" id="Insert_logo" style="background-color: #8090AB; display:block;" /> 
+  <!-- end .header --></div>
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="inicio.html">Inicio</a></li>
+      <li><a href="componentes.html">Componentes</a></li>
+      <li><a href="ensamble.html">Ensamble</a>    </li>
+    </ul>
+    <p>&nbsp;</p>
+    <!-- end .sidebar1 --></div>
+  <div class="content">
+    <h1>Componentes</h1>
+    <p>En esta sección encontraras todos los componentes que forman el CPU, en cada componente hay una pequeña descripción sobre su funcionamiento dentro del CPU y un link de una pagina donde puedes comprar el componente que mas se te acomode a tu gusto.<a href="http://www.adobe.com/go/adc_css_layouts"></a></p>
+    <p>-Procesador: también conocido como CPU o micro, es el cerebro del PC. Sus funciones principales incluyen el manejo del sistema operativo, la ejecución de las aplicaciones y la coordinación de los diferentes dispositivos que componen el equipo. En el aspecto físico, no es más que una pequeña pastilla de silicio la cual está recubierta de lo que llamamos encapsulado. Este se inserta en la placa base sobre un conector que se denomina socket, aunque esto no siempre es así, en un laptop o portátil lo normal es que se suelde directamente.</p>
+    <p>Si quieres comprar el procesador da clic <a href="https://www.cyberpuerta.mx/Computo-Hardware/Componentes/Procesadores/Procesadores-para-PC/">aqui</a>: </p>
+    <p>-Tarjeta Madre: es la tarjeta principal en la estructura interna del computador donde se encuentran los circuitos electrónicos, el procesador, las memorias, y las conexiones principales, en ella se conectan todos los componentes del computador. Esta tarjeta tiene como función principal controlar todos los elementos del servidor, de ella depende que dichos componentes estén bien comunicados unos de otros para garantizar el funcionamiento del sistema, es por eso que es un dispositivo muy importante dentro del computador.</p>
+	  <p>Si quieres comprar la tarjeta madre da clic <a href="https://www.cyberpuerta.mx/Computo-Hardware/Componentes/Tarjetas-Madre/?exactMatch=Tarjeta madre&amp;redirected=1">aqui</a>:</p>
+    <p>-Tarjeta de video: es un dispositivo electrónico que se encarga de regular y determinar la forma en cómo se mostraran las imágenes y texto que se observa en el monitor de la computadora. Son las que envían señal a nuestro monitor, televisor o proyector. La calidad de la tarjeta de video en una computadora influye sobre todo a la hora de jugar, editar vídeo o 3D. se encarga de traducir la información que se procesa en la computadora y mostrarla de manera que se pueda entender por el usuario común, a este dispositivo también se le conoce como controlador de vídeo, adaptador de vídeo, acelerador de vídeo o acelerador gráfico, en la actualidad existen muchas marcas y modelos de tarjetas de vídeo y la gran mayoría están destinadas para usuarios que requieren mucha capacidad gráfica para trabajar, por ejemplo los diseñadores gráficos o los vídeo jugadores.</p>
+	  <p>Si quieres comprar la tarjeta de video da clic <a href="https://www.cyberpuerta.mx/Computo-Hardware/Componentes/Tarjetas-de-Video/?exactMatch=Tarjeta de Video&amp;force_sid=rjo53id367l4nbrnhc45ja9fol&amp;redirected=1">aqui</a>:</p>
+    <p>-Memoria RAM: se utiliza como memoria de trabajo de computadoras y otros dispositivos para el sistema operativo, los programas y la mayor parte del software. En la RAM se cargan todas las instrucciones que ejecuta la unidad central de procesamiento (procesador) y otras unidades del computador, además de contener los datos que manipulan los distintos programas. Se denominan «de acceso aleatorio» porque se puede leer o escribir en una posición de memoria con un tiempo de espera igual para cualquier posición, no siendo necesario seguir un orden para acceder (acceso secuencial) a la información de la manera más rápida posible.</p>
+	  <p>Si quieres comprar la Memoria RAM da clic <a href="https://www.cyberpuerta.mx/Computo-Hardware/Memorias-RAM-Flash/?exactMatch=memoria ram&amp;force_sid=rjo53id367l4nbrnhc45ja9fol&amp;redirected=1">aqui</a>:</p>
+    <p>-Disco Duro: es el dispositivo electrónico donde se almacena toda la información que se procesa en la computadora incluyendo el sistema operativo y las aplicaciones. Esta emplea un sistema de grabación magnético para almacenar datos digitales y está compuesto por uno o más platos o discos que se unen por un eje que gira a una gran velocidad dentro de una caja metálica que los protege. Cabe destacar que actualmente se está perfeccionando la tecnología de discos en estado sólido o SSD (Solid State Drive) donde la información es grabada y leída gracias a procesos químicos.</p>
+	  <p>Si quieres comprar el disco duro da clic <a href="https://www.cyberpuerta.mx/Computo-Hardware/Discos-Duros-SSD-NAS/Discos-Duros-Internos-para-PC/">aqui</a>:</p>
+    <p>-Lector y/o grabador de DVD’s: También llamada unidad de disco óptico, es una unidad de disco que usa láser u ondas electromagnéticas cerca al espectro de la luz como parte del proceso de lectura o escritura de datos desde discos ópticos o a ellos. Se usa el término lectograbadora para referirse a aquellas unidades que pueden hacer tanto la función de lectura como la de grabadora. Los CD (Compact Disc, en español Disco Compacto) tienen una capacidad de 700 MB. Los Mini-CD tienen una capacidad de 214 MB. Los DVD (Digital Versatile Disc, en español Disco Versátil Digital) tienen una capacidad de 4´7 GB. Los Blu-ray tienen una capacidad desde los 25 GB hasta los 33´4 GB por capa.</p>
+	  <p>Si quieres comprar el Lector-Grabador de DVD’s da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss_2?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=Lector+de+dvd+interno&amp;rh=i%3Aaps,k%3ALector+de+dvd+interno">aqui</a>:</p>
+    <p>-Fuente de poder: es componente electrónico que sirve para abastecer de electricidad al computador. Un nombre más adecuado sería el de transformador, porque convierte o transforma corriente alterna (AC) en corriente directa (DC), y baja el voltaje de 120 voltios AC a 12,5 voltios DC, necesarios para la PC y sus componentes. Además de suministrar la energía para operar la computadora, la fuente de poder también asegura que esta no opere a menos que la corriente que se suministre sea suficiente para que funcione de forma adecuada; es decir, la fuente de poder evita que la computadora arranque u opere hasta que estén presentes todos los niveles correctos de energía.</p>
+    <p>Si quieres comprar la fuente de poder da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss_2?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=Fuente+de+poder+pc&amp;rh=i%3Aaps,k%3AFuente+de+poder+pc">aqui</a>:</p>
+    <p>-Gabinete: es el armazón que contiene los principales componentes de hardware de una computadora: su CPU, tarjeta madre, microprocesador, memoria, disco rígido y unidades internas (lector de CD o DVD, etc.). La principal función del gabinete es proteger a estos componentes. Sin embargo, la computación ha avanzado hacia el diseño artístico de gabinetes, que pasaron a ser, además, un objeto decorativo.</p>
+    <p>Si quieres comprar el gabinete da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss_2?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=gabinete+pc&amp;rh=i%3Aaps,k%3Agabinete+pc">aqui</a>:</p>
+	<p>-Teclado: es un dispositivo o periférico de entrada, en parte inspirado en el teclado de las máquinas de escribir, que utiliza una disposición de botones o teclas, para que actúen como palancas mecánicas o interruptores electrónicos que envían información a la computadora. Después de las tarjetas perforadas y las cintas de papel, la interacción a través de los teclados, al estilo teletipo, se convirtió en el principal dispositivo de entrada para las computadoras.</p>
+	<p>Si quieres comprar el teclado da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss_1?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=teclado+&amp;rh=i%3Aaps,k%3Ateclado+">aqui</a>:</p>
+	<p>-Mouse: es un dispositivo apuntador utilizado para facilitar el manejo de un entorno gráfico en una computadora. Generalmente está fabricado en plástico, y se utiliza con una de las manos. Detecta su movimiento relativo en dos dimensiones por la superficie plana en la que se apoya, reflejándose habitualmente a través de un puntero, cursor o flecha en el monitor. El ratón se puede conectar de forma alámbrica (puertos PS/2 y USB) o inalámbricamente (comunicación inalámbrica o wireless, por medio de un adaptador USB se conecta a la computadora y esta manda la señal al ratón, también pueden ser por medio de conectividad bluetooth o infrarrojo).</p>
+	<p>Si quieres comprar el mouse da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=mouse">aqui</a>:</p>
+	<p>-Monitor: es el principal Periférico de salida de una Computadora. Estos se conectan a través de una Tarjeta gráfica conocida con el nombre de adaptador o Tarjeta de vídeo. La imagen que podemos observar en los monitores está formada por una Matriz de puntos de luz. Cada punto de luz reflejado en la pantalla es denominado como un Pixel.</p>
+	<p>Si quieres comprar el monitor da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss_2?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=monitor&amp;rh=i%3Aaps,k%3Amonitor">aqui</a>:</p>
+	<p>-Bocinas o Audífonos: dispositivos de audio clasificados como periféricos de salida, que reciben señales analógicas por medio de un cable desde el puerto de audio y las transforman en sonido.</p>
+	<p>Si quieres comprar las bocinas da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=Bocinas">aqui</a> o para los audifonos Audifonos da clic <a href="https://www.amazon.com.mx/s/ref=nb_sb_noss_2?__mk_es_MX=ÅMÅŽÕÑ&amp;url=search-alias=aps&amp;field-keywords=audifonos&amp;rh=i%3Aaps,k%3Aaudifonos">aqui</a>:</p>
+  </div>
+  <div class="footer">
+    <p>Espero que la información te haya sido de mucha ayuda, y recuerda que si alguien más necesita ayuda comparte esta pagina.</p>
+    <!-- end .footer --></div>
+<!-- end .container --></div>
+</body>
+</html>

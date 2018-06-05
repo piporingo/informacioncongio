@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Información con Gio</title>
+<style type="text/css">
+<!--
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	background-color: #4E5869;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+/* ~~ Selectores de elemento/etiqueta ~~ */
+ul, ol, dl { /* Debido a las diferencias existentes entre los navegadores, es recomendable no añadir relleno ni márgenes en las listas. Para lograr coherencia, puede especificar las cantidades deseadas aquí o en los elementos de lista (LI, DT, DD) que contienen. Recuerde que lo que haga aquí se aplicará en cascada en la lista .nav, a no ser que escriba un selector más específico. */
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;	 /* la eliminación del margen superior resuelve un problema que origina que los márgenes escapen de la etiqueta div contenedora. El margen inferior restante lo mantendrá separado de los elementos de que le sigan. */
+	padding-right: 15px;
+	padding-left: 15px; /* la adición de relleno a los lados del elemento dentro de las divs, en lugar de en las divs propiamente dichas, elimina todas las matemáticas de modelo de cuadro. Una div anidada con relleno lateral también puede usarse como método alternativo. */
+}
+a img { /* este selector elimina el borde azul predeterminado que se muestra en algunos navegadores alrededor de una imagen cuando está rodeada por un vínculo */
+	border: none;
+}
+
+/* ~~ La aplicación de estilo a los vínculos del sitio debe permanecer en este orden (incluido el grupo de selectores que crea el efecto hover -paso por encima-). ~~ */
+a:link {
+	color:#414958;
+	text-decoration: underline; /* a no ser que aplique estilos a los vínculos para que tengan un aspecto muy exclusivo, es recomendable proporcionar subrayados para facilitar una identificación visual rápida */
+}
+a:visited {
+	color: #4E5869;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* este grupo de selectores proporcionará a un usuario que navegue mediante el teclado la misma experiencia de hover (paso por encima) que experimenta un usuario que emplea un ratón. */
+	text-decoration: none;
+}
+
+/* ~~ este contenedor rodea a todas las demás divs, lo que les asigna su anchura basada en porcentaje ~~ */
+.container {
+	width: 80%;
+	max-width: 1260px;/* puede que sea conveniente una anchura máxima (max-width) para evitar que este diseño sea demasiado ancho en un monitor grande. Esto mantiene una longitud de línea más legible. IE6 no respeta esta declaración. */
+	min-width: 780px;/* puede que sea conveniente una anchura mínima (min-width) para evitar que este diseño sea demasiado estrecho. Esto permite que la longitud de línea sea más legible en las columnas laterales. IE6 no respeta esta declaración. */
+	background-color: #FFF;
+	margin: 0 auto; /* el valor automático de los lados, unido a la anchura, centra el diseño. No es necesario si establece la anchura de .container en el 100%. */
+}
+
+/* ~~ no se asigna una anchura al encabezado. Se extenderá por toda la anchura del diseño. Contiene un marcador de posición de imagen que debe sustituirse por su propio logotipo vinculado ~~ */
+.header {
+	background-color: #6F7D94;
+}
+
+/* ~~ Estas son las columnas para el diseño. ~~ 
+
+1) El relleno sólo se sitúa en la parte superior y/o inferior de las divs. Los elementos situados dentro de estas divs tienen relleno a los lados. Esto le ahorra las "matemáticas de modelo de cuadro". Recuerde que si añade relleno o borde lateral a la div propiamente dicha, éste se añadirá a la anchura que defina para crear la anchura *total*. También puede optar por eliminar el relleno del elemento en la div y colocar una segunda div dentro de ésta sin anchura y el relleno necesario para el diseño deseado.
+
+2) No se asigna margen a las columnas, ya que todas ellas son flotantes. Si es preciso añadir un margen, evite colocarlo en el lado hacia el que se produce la flotación (por ejemplo: un margen derecho en una div configurada para flotar hacia la derecha). En muchas ocasiones, puede usarse relleno como alternativa. En el caso de divs para las que deba incumplirse esta regla, deberá añadir una declaración "display:inline" a la regla de la div para evitar un error que provoca que algunas versiones de Internet Explorer dupliquen el margen.
+
+3) Dado que las clases se pueden usar varias veces en un documento (y que también se pueden aplicar varias clases a un elemento), se ha asignado a las columnas nombres de clases en lugar de ID. Por ejemplo, dos divs de barra lateral podrían apilarse si fuera necesario. Si lo prefiere, éstas pueden cambiarse a ID fácilmente, siempre y cuando las utilice una sola vez por documento.
+
+4) Si prefiere que la navegación esté a la derecha en lugar de a la izquierda, simplemente haga que estas columnas floten en dirección opuesta (todas a la derecha en lugar de todas a la izquierda) y éstas se representarán en orden inverso. No es necesario mover las divs por el código fuente HTML.
+
+*/
+.sidebar1 {
+	float: left;
+	width: 20%;
+	background-color: #93A5C4;
+	padding-bottom: 10px;
+}
+.content {
+	padding: 10px 0;
+	width: 80%;
+	float: left;
+}
+
+/* ~~ Este selector agrupado da espacio a las listas del área de .content ~~ */
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; /* este relleno reproduce en espejo el relleno derecho de la regla de encabezados y de párrafo incluida más arriba. El relleno se ha colocado en la parte inferior para que el espacio existente entre otros elementos de la lista y a la izquierda cree la sangría. Estos pueden ajustarse como se desee. */
+}
+
+/* ~~ Los estilos de lista de navegación (pueden eliminarse si opta por usar un menú desplegable predefinido como el de Spry) ~~ */
+ul.nav {
+	list-style: none; /* esto elimina el marcador de lista */
+	border-top: 1px solid #666; /* esto crea el borde superior de los vínculos (los demás se sitúan usando un borde inferior en el LI) */
+	margin-bottom: 15px; /* esto crea el espacio entre la navegación en el contenido situado debajo */
+}
+ul.nav li {
+	border-bottom: 1px solid #666; /* esto crea la separación de los botones */
+}
+ul.nav a, ul.nav a:visited { /* al agrupar estos selectores, se asegurará de que los vínculos mantengan el aspecto de botón incluso después de haber sido visitados */
+	padding: 5px 5px 5px 15px;
+	display: block; /* esto asigna propiedades de bloque al vínculo, lo que provoca que llene todo el LI que lo contiene. Esto provoca que toda el área reaccione a un clic de ratón. */
+	text-decoration: none;
+	background-color: #8090AB;
+	color: #000;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* esto cambia el color de fondo y del texto tanto para usuarios que naveguen con ratón como para los que lo hagan con teclado */
+	background-color: #6F7D94;
+	color: #FFF;
+}
+
+/* ~~ El pie de página ~~ */
+.footer {
+	padding: 10px 0;
+	background-color: #6F7D94;
+	position: relative;/* esto da a IE6 hasLayout para borrar correctamente */
+	clear: both; /* esta propiedad de borrado fuerza a .container a conocer dónde terminan las columnas y a contenerlas */
+}
+
+/* ~~ clases float/clear varias ~~ */
+.fltrt {  /* esta clase puede utilizarse para que un elemento flote en la parte derecha de la página. El elemento flotante debe preceder al elemento junto al que debe aparecer en la página. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* esta clase puede utilizarse para que un elemento flote en la parte izquierda de la página. El elemento flotante debe preceder al elemento junto al que debe aparecer en la página. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* esta clase puede situarse en una <br /> o div vacía como elemento final tras la última div flotante (dentro de #container) si #footer se elimina o se saca fuera de #container */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+-->
+</style><!--[if lte IE 7]>
+<style>
+.content { margin-right: -1px; } /* este margen negativo de 1 px puede situarse en cualquiera de las columnas de este diseño con el mismo efecto corrector. */
+ul.nav a { zoom: 1; }  /* la propiedad de zoom da a IE el desencadenante hasLayout que necesita para corregir el espacio en blanco extra existente entre los vínculos */
+</style>
+<![endif]--></head>
+
+<body background="imagenes/fondo.jpeg">
+
+<div class="container">
+  <div class="header"><img src="imagenes/logo.jpeg" alt="Insertar logotipo aquí" name="logo" width="100%" height="300" id="Insert_logo" style="background-color: #8090AB; display:block;" /> 
+  <!-- end .header --></div>
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="inicio.html">Inicio</a></li>
+      <li><a href="componentes.html">Componentes</a></li>
+      <li><a href="ensamble.html">Ensamble</a>    </li>
+    </ul>
+    <p>&nbsp;</p>
+    <!-- end .sidebar1 --></div>
+  <div class="content">
+    <h1>Ensamble</h1>
+    <p>En esta página aprenderá como integrar todos los componentes que integran una computadora.</p>
+    <p><strong>Nota:</strong> es indispensable tener los desarmadores necesarios de cabeza plana y cruz, así como una pulsera antiestática, para evitar algún daño a nuestros componentes.    </p>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Antes de comenzar, primero vamos a tocar los puntos más importantes para poder ensamblar una computadora, después daré una explicación más detallada con imágenes.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">1.-</span><span lang="ES-PE" xml:lang="ES-PE"> Quitar la tapa del case</span> (CPU)</div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">2.- </span><span lang="ES-PE" xml:lang="ES-PE">Instalar en el case (CPU) la fuente de energía</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">3.- </span><span lang="ES-PE" xml:lang="ES-PE">Instalar la mainboard en el interior del case</span> (CPU)</div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">4.- </span><span lang="ES-PE" xml:lang="ES-PE">Instalar las unidades internas (memoria RAM, disco duro, Lectora, etc.)</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">5.- </span><span lang="ES-PE" xml:lang="ES-PE">Conectar todos los cables internas en los lugares correspondientes</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">6.- </span><span lang="ES-PE" xml:lang="ES-PE">Colocar y empernar la tapa del case</span> (CPU)</div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">7.- </span><span lang="ES-PE" xml:lang="ES-PE">Conectar las unidades externas (teclado, mouse, monitor, etc.)</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <strong>Ahora les enseñare como hacerlo con imágenes.</strong><br />
+    <div><img src="ensamble/01.JPG" alt="" border="0" /></div>
+    <br />
+    <div><span lang="ES-PE" xml:lang="ES-PE">Bueno lo primero que vamos a realizar es retirar la tapa del case, para eso necesitamos un desarmador estrella. </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/02.jpg" alt="" width="318" height="202" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora vamos  a instalar la fuente de energía, para eso debemos colocarla en su lugar y empernarlo bien para que nos quede de esta manera.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/03.jpg" alt="" width="288" height="182" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora pasamos a colocar el CPU en el socket, para eso debemos identificar en que posición encaja para después asegurarlo con su seguro.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/04.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">El CPU debe de quedar de esta manera.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/05.jpg" alt="" width="188" height="184" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Una vez que terminamos de colocar el CPU pasamos a agregar un poco de pasta térmica encima, la pasta térmica nos sirve para que el CPU no se caliente demasiado, después encima colocamos el COOLER para ayudar  a mantener en temperatura adecuada nuestro procesador.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/06.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">No hay que olvidar que el cooler necesita asegurarse mediante sus 4 extremos y conectar cable en el CPU FAN.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/07.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora vamos a colocar la memoria RAM, no olviden que tienen que saber que tipo de ranura tiene su memoria y la cantidad de BUS necesaria, sino su computadora no va a trabajar. Entonces según la ranura ubicamos la memoria en el puerto de expansión, la insertamos, por ultimo debemos asegurarla con los ganchos que tiene a los extremos.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/08.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora pasamos a instalar la Mainboard en el case, los conectores de entrada deben ir en una posición en la cual se puedan conectar los periféricos de entrada desde la parte externa del case.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/09.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Una vez que tenemos instalada la mainboard, en el caso que quisiéramos vamos a colocar tarjetas de expansión (video, Red, WLAN).Primero comenzamos con la tarjeta de video, en este caso va en el puerto AGP.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/10.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora vamos a colocar la tarjeta de red, en algunas casos dependiendo del tipo de tarjeta puedo ir en  el puerto PCI, en el puerto AMR .</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/11.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Una vez que colocamos la tarjeta de red, pasamos a colocar la tarjera WLAN (red inalámbrica). La antena se coloca después.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/12.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora que hemos terminado de instalar las tarjetas, vamos a instalar nuestras unidades internas (Disco Duro, Disquetera, etc.).Primero colocamos el disco duro de tal manera que encaje en el compartimiento de unidades 3.5, lo alineamos con los orificios del chasis para así poder empernarlo.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/13.jpg" alt="" width="366" height="193" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Una vez que colocamos el disco duro, pasamos a colocar la lectora de DVD por la parte externa del case, en el compartimiento de unidades frontal.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/14.jpg" alt="" width="368" height="226" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">De la misma manera colocamos las disquetera, solo que esta va a ir en el compartimiento inferior.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/15.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora pasamos a conectar todos los cables de la fuente a la mainboard. Primero colocamos el Cable p1 en el ATX.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/16.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Después colocamos el cable de 12V en el conector ATX 12V.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/17.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora vamos a colocar los cables de energía en las distintas unidades, primero comenzamos con la lectora de DVD, colocamos en cable Molex en la parte correcta de la Lectora.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/18.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Pasamos a colocar el cable Berg en la disquetera.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/19.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">En nuestro caso nuestro disco duro tiene una entrada SATA, entonces nosotros colocamos el cable SATA a nuestro disco duro, en el caso de que no sea SATA, se le coloca otro cable Molex.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/20.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora pasamos a colocar los cables de data (Cable PATA, SATA, FLOPPY).Primero comenzamos  con el cable PATA, lo colocamos correctamente en el puerto IDE.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/21.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">De la misma manera vamos a colocar el cable Floppy en el puerto floppy, teniendo en cuenta que el Pin 1 es que manda, después el otro extremo lo colocamos en la disquetera.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/22.jpg" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Por ultimo colocamos nuestro cable SATA en el puerto SATA de las mainboard, nos aseguramos que este bien conectado, después conectamos el otro extremo en el disco duro.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/23.JPG" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Una vez que terminamos de conectar todo correctamente, pasamos a cerrar el case con las tapas que habíamos retirado anteriormente, no olvidar que se tiene que empernar para que este mas fijo.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/24.JPG" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora empezamos a colocar algunos periféricos de entrada (mouse y teclado en este caso).No olvidar que deben colocar los cables según la ranura que indican.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/25.JPG" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora colocamos nuestro cable de video, en mi caso es un cable DVI, normalmente la mayoría de computadoras utiliza el puerto VGA.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/26.JPG" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Si tuviéramos algún dispositivo con  tipo de entrada USB, entonces procedemos a conector en cualquiera de los puertos USB.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/27.JPG" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora pasamos a colocar nuestro cable Ethernet, el que nos permite conectarnos a una Red</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/28.JPG" alt="" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Ahora colocamos la Antena Inalámbrica en el puerto inalámbrico.</span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><img src="ensamble/29.JPG" alt="" width="568" height="355" border="0" /></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE"><br />
+    </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Para terminar colocamos nuestra cable de energía en la parte posterior de la Fuente de poder.</span><br />
+      <span lang="ES-PE" xml:lang="ES-PE"><br />
+      </span><br />
+      <div><img src="ensamble/30.JPG" alt="" width="565" height="354" border="0" /></div>
+      <span lang="ES-PE" xml:lang="ES-PE"><br />
+      </span></div>
+    <div><span lang="ES-PE" xml:lang="ES-PE">Como paso final prendemos nuestra maquina y debe estar operativa.</span><br />
+      <span lang="ES-PE" xml:lang="ES-PE"><br />
+      </span><br />
+      <div><img src="ensamble/31.JPG" alt="" width="593" height="310" border="0" /></div>
+    </div>
+  </div>
+  <div class="footer">
+    <p>Espero que la información te haya sido de mucha ayuda, y recuerda que si alguien más necesita ayuda comparte esta pagina.</p>
+    <!-- end .footer --></div>
+<!-- end .container --></div>
+</body>
+</html>
